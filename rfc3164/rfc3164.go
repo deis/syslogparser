@@ -35,9 +35,13 @@ func NewParser(buff []byte) *Parser {
 }
 
 func (p *Parser) Parse() error {
-	pri, err := p.parsePriority()
-	if err != nil {
-		return err
+	pri := syslogparser.Priority{}
+	if p.buff[0] == '<' {
+		priority, err := p.parsePriority()
+		if err != nil {
+			return err
+		}
+		pri = priority
 	}
 
 	hdr, err := p.parseHeader()
